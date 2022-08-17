@@ -26,7 +26,7 @@
                 </div>
             </div>
             <div class="card-footer text-muted text-center">
-                Последнее обновление было {{ item.created_at|timesince }} назад
+                Последнее обновление было {{ item.created_at|date:"Y-m-d H:i" }}
             </div>
         </div>
     {% endfor %}
