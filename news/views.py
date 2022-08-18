@@ -2,12 +2,34 @@ from django.shortcuts import render, get_object_or_404, redirect
 from .forms import NewsForm
 from django.views.generic import ListView, DetailView, CreateView
 from .models import News, Categories
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib import messages
+
+
+def register(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Вы успешно зарегистрировались')
+            return redirect('login')
+        else:
+            messages.error(request, 'Ошибка регистрации')
+    else:
+        form = UserCreationForm()
+    return render(request, 'news/register.html', {"form": form})
+
+
+def login(request):
+    return render(request, 'news/login.html')
 
 
 class HomeNews(ListView):
     model = News
     template_name = 'news/index.html'
     context_object_name = 'news'
+    paginate_by = 2
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -23,6 +45,7 @@ class NewsbyCategory(ListView):
     template_name = 'news/category.html'
     context_object_name = 'category'
     allow_empty = False
+    paginate_by = 2
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -40,10 +63,10 @@ class ViewNews(DetailView):
     context_object_name = 'news_item'
 
 
-class CreateNews(CreateView):
+class CreateNews(LoginRequiredMixin, CreateView):
     form_class = NewsForm
     template_name = 'news/add_news.html'
-
+    raise_exception = True
 # def index(request):
 #     news = News.objects.all()
 #     context = {
