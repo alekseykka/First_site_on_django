@@ -17,7 +17,7 @@
                 {% endif %}
                 <div class="media-body">
                     <h5 class="card-title">{{ news_item.title }}</h5>
-                    <p class="card-text mx-0">{{ news_item.content|truncatewords:55 }}</p>
+                    <p class="card-text mx-0">{{ news_item.content| safe |truncatewords:55 | linebreaks   }}</p>
                 </div>
 
             </div>

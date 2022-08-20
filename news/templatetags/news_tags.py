@@ -1,4 +1,5 @@
 from django import template
+from django.core.cache import cache
 from django.db.models import Count, Q
 from news.models import Categories
 
@@ -11,7 +12,9 @@ def get_categories():
 
 
 @register.inclusion_tag('news/list_categories.html')
-def show_categories(arg1='Hello', arg2='world'):
+def show_categories():
+    # categories = cache.get('categories')
+    # if not categories:
     categories = Categories.objects.filter(Q(news__pk__gt=0) & Q(news__is_published=True)).annotate(cnt=Count('news'))
-    # categories = Categories.objects.all()
-    return {"categories": categories, "arg1": arg1, "arg2": arg2}
+    # cache.set('categories', categories, 50)
+    return {"categories": categories}

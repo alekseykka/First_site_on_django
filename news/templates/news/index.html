@@ -20,7 +20,7 @@
                     {% endif %}
                     <div class="media-body">
                         <h5 class="card-title">{{ item.title }}</h5>
-                        <p class="card-text mx-0">{{ item.content|truncatewords:55 }}</p>
+                        <p class="card-text mx-0">{{ item.content| safe |truncatewords:55 | linebreaks  }}</p>
                     </div>
                     <a href="{{ item.get_absolute_url }}" class="btn btn-primary">Go somewhere</a>
                 </div>
